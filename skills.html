@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>李洁瑜 · 技能与经历</title>
+<style>
+:root{
+  --deep:#0b1c22; --panel:#122e37; --panel2:#183c46; --line:#061114;
+  --amber:#f2b23c; --mint:#79e3c3; --cream:#f3e6c8; --dim:#a9b9b5;
+  --px:4px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--deep);color:var(--cream);
+  font-family:"Microsoft YaHei","PingFang SC","Source Han Sans SC",system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;overflow:auto}
+.mono{font-family:ui-monospace,"Cascadia Mono",Consolas,monospace;letter-spacing:.08em}
+
+.bg{position:fixed;inset:0;z-index:-2;overflow:hidden}
+.bg img{width:100%;height:100%;object-fit:cover;object-position:center 42%;
+  image-rendering:pixelated;filter:saturate(.92) contrast(1.02)}
+.bg::after{content:"";position:absolute;inset:0;
+  background:radial-gradient(120% 95% at 50% 38%,rgba(8,22,28,.42),rgba(6,17,22,.88) 82%),
+             linear-gradient(180deg,rgba(6,17,22,.7),rgba(6,17,22,.3) 32%,rgba(6,17,22,.9))}
+.scan{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.2;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.5) 0 1px,transparent 1px 4px)}
+
+.win{position:relative;background:var(--panel);border:var(--px) solid var(--line);
+  box-shadow:5px 5px 0 rgba(0,0,0,.5)}
+.bar{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--panel2);
+  border-bottom:var(--px) solid var(--line);font-size:11px;letter-spacing:.16em;color:var(--dim)}
+.bar i{width:10px;height:10px;background:var(--amber)}
+.bar b{color:var(--cream);font-weight:700}
+
+.wrap{width:min(880px,calc(100% - 48px));margin:0 auto;min-height:100vh;display:flex;flex-direction:column;justify-content:flex-start;padding:40px 0}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 0 12px}
+.back{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:var(--cream);
+  font-size:14px;letter-spacing:.12em;border:3px solid var(--line);background:rgba(11,28,34,.72);
+  padding:12px 18px;box-shadow:3px 3px 0 rgba(0,0,0,.5)}
+.back:hover{background:var(--amber);color:#0d2027}
+.topbar .file{font-size:11px;color:var(--mint);letter-spacing:.2em}
+
+.head{display:flex;align-items:stretch;gap:14px;margin-bottom:12px}
+.tag{display:inline-flex;align-items:center;font-size:13px;letter-spacing:.2em;color:var(--amber);border:2px solid var(--amber);padding:0 10px}
+.head h2{font-size:clamp(22px,2.6vw,30px);font-weight:800;line-height:1.1;letter-spacing:.08em;text-shadow:2px 2px 0 #061114}
+.head .note{font-size:11px;color:var(--dim);margin-left:auto;letter-spacing:.1em;align-self:center}
+
+.panel{padding:16px 24px}
+.panel + .panel{margin-top:12px}
+.panel .bar{margin:-16px -24px 14px}
+
+/* 软件技能：单行条目 */
+.sbar{display:grid;grid-template-columns:150px 1fr 60px;gap:14px;align-items:center;margin-bottom:12px;font-size:14px;color:var(--cream)}
+.sbar:last-of-type{margin-bottom:0}
+.track{height:10px;border:2px solid var(--line);background:rgba(0,0,0,.4)}
+.track::after{content:"";display:block;height:100%;width:var(--w);background:var(--mint)}
+.sbar .lv{font-size:12px;font-weight:700;letter-spacing:.1em;text-align:right;color:var(--mint)}
+.sbar .lv.mid{color:var(--dim)}
+
+.plain-line{margin-top:14px;padding-top:12px;border-top:2px dashed rgba(243,230,200,.14);
+  font-size:12.5px;color:#c6d3cf;line-height:1.9}
+.plain-line b{color:var(--cream);font-weight:700}
+.plain-line .am{color:var(--amber)}
+
+/* 经历：两行式 */
+.tl{display:grid;gap:0}
+.tl-item{display:grid;grid-template-columns:150px 1fr;gap:16px;padding:6px 0;
+  border-bottom:2px dashed rgba(243,230,200,.14);align-items:start}
+.tl-item:last-child{border-bottom:none}
+.tl .yr{font-family:ui-monospace,monospace;font-size:11px;color:var(--mint);letter-spacing:.06em;padding-top:3px}
+.tl .rl b{display:block;font-size:14px;font-weight:700;letter-spacing:.04em;margin-bottom:5px}
+.tl .rl i{font-style:normal;font-size:11px;color:var(--dim);margin-right:8px}
+.tl .ds{font-size:12.5px;color:#c6d3cf;line-height:1.65}
+.tl .ds .p{position:relative;padding-left:11px;margin-bottom:4px}
+.tl .ds .p::before{content:"·";position:absolute;left:0;top:0;color:var(--amber)}
+.tl .ds .p:last-child{margin-bottom:0}
+.tl .ds .sub{margin-top:7px;padding-top:6px;border-top:1px dashed rgba(243,230,200,.12)}
+.tl .ds .yr2{color:var(--mint);font-family:ui-monospace,monospace;font-size:11px;letter-spacing:.05em;margin-bottom:2px}
+.tl .ds .aw{color:var(--amber)}
+
+@media(max-width:900px){
+  body{overflow:auto}
+  .sbar{grid-template-columns:120px 1fr 56px;gap:10px;font-size:13px}
+  .tl-item{grid-template-columns:1fr;gap:4px}
+  .tl .yr{padding-top:0}
+}
+</style>
+</head>
+<body>
+
+<div class="bg"><img src="assets/bg-typing.gif" alt=""></div>
+<div class="scan"></div>
+
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="index.html">◀ 返回菜单</a>
+    <span class="file">文件 03 · 技能与经历</span>
+  </div>
+
+  <div class="head">
+    <span class="tag">03</span><h2>技能与经历</h2><span class="note">软件 · 实战 · 经历</span>
+  </div>
+
+  <!-- 软件技能 -->
+  <section class="panel win">
+    <div class="bar"><i></i><b>软件技能</b></div>
+    <div class="sbar"><span>Premiere Pro</span><span class="track" style="--w:90%"></span><span class="lv">熟练</span></div>
+    <div class="sbar"><span>DaVinci Resolve</span><span class="track" style="--w:90%"></span><span class="lv">熟练</span></div>
+    <div class="sbar"><span>剪映</span><span class="track" style="--w:90%"></span><span class="lv">熟练</span></div>
+    <div class="sbar"><span>After Effects</span><span class="track" style="--w:68%"></span><span class="lv mid">掌握</span></div>
+    <div class="sbar"><span>WPS / Office</span><span class="track" style="--w:80%"></span><span class="lv">熟练</span></div>
+
+    <div class="plain-line">
+      <b>实战能力：</b>后期全流程 · 现场数据管理 · 现场摄影 · AI 生成剪辑 · 调色音效 · 素材归档<br>
+      <b>证书：</b><span class="am">大学英语四级（CET-4）</span><br>
+      <b>荣誉：</b><span class="am">连续三年获校内学习奖学金</span>
+    </div>
+  </section>
+
+  <!-- 经历 -->
+  <section class="panel win">
+    <div class="bar"><i></i><b>经历</b></div>
+    <div class="tl">
+      <div class="tl-item">
+        <span class="yr">2023.09–2025.06</span>
+        <div class="rl">
+          <b>学校全媒体中心 · 摄影师</b><i>在校任职</i>
+          <div class="ds">
+            <div class="p">负责学校各类大型校园活动的全程摄影，把控拍摄画面质量与素材完整性，留存优质校园影像资料。</div>
+            <div class="p">配合中心宣传需求完成图片筛选、整理与交付，为学校官方宣传平台提供视觉素材，保障宣传工作顺利开展。</div>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <span class="yr">2023.09–2025.06</span>
+        <div class="rl">
+          <b>学校校友会 · 摄影师</b><i>在校任职</i>
+          <div class="ds">
+            <div class="p">负责校友见面会、返校联谊、校友座谈等活动的全程纪实拍摄，精准捕捉活动关键画面。</div>
+            <div class="p">协助完成影像素材归档整理，支持校友文化宣传、活动复盘与资料留存。</div>
+            <div class="p">配合工作安排灵活调整拍摄节奏，高效完成任务，保障各类校友活动的宣传展示效果。</div>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <span class="yr">2023–2026</span>
+        <div class="rl">
+          <b>短片 / 短剧项目 · 摄影 / 剪辑 / DIT</b><i>项目经历</i>
+          <div class="ds">
+            <div class="p">核心参与《枯夜》《是大海一片》《琉璃咯嘣》《千里走单骑》《脸谱渡两世，云华共此生》等多部学生短片、短剧拍摄。</div>
+            <div class="sub">
+              <div class="yr2">2024</div>
+              <div class="p">短片《琉璃咯嘣》担任 DIT，负责拍摄素材的整理、备份、格式转换及管理。</div>
+            </div>
+            <div class="sub">
+              <div class="yr2">2025</div>
+              <div class="p">短片《千里走单骑》担任摄影与 DIT，主导拍摄方案落地、镜头语言设计，统筹素材管理与后期制作。</div>
+              <div class="p">短剧《脸谱渡两世，云华共此生》担任 DIT 与后期，完成剪辑、调色、音效搭配等全流程工作。</div>
+            </div>
+            <div class="sub">
+              <div class="yr2">2026</div>
+              <div class="p">宣传片《成都影视城宣传片》负责剪辑与 AI 视频生成；AI 漫剧《全军无限复活，我无敌》负责剪辑与 AI 视频生成。</div>
+              <div class="p">影视广告《红丝贯古今，联通寄情长》负责 AI 生成与剪辑，<span class="aw">获全国大学生广告艺术大赛全国三等奖</span>。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <span class="yr">2023</span>
+        <div class="rl">
+          <b>多地青年影展 · 放映员 / 摄影师</b><i>展映实践</i>
+          <div class="ds">
+            <div class="p">参与 MIFW 冇国际青年影像周、AME 影视行动展映、香港浸会大学第十八届 MFA 青年电影展映、长安城真实影像计划、VITA 地平线华语青年影展、FBS 五十校巡展计划等多个大型影视展映活动。</div>
+            <div class="p">负责展映现场的放映操作与秩序管理，把控影片播放节奏，协助主办方保障多场活动顺利落地。</div>
+            <div class="p">担任现场专属摄影师，捕捉活动精彩瞬间，完成照片后期修图、分类整理及归档，为活动宣传提供视觉素材。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+</body>
+</html>

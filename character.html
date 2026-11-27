@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>李洁瑜 · 角色信息</title>
+<style>
+:root{
+  --deep:#0b1c22; --panel:#122e37; --panel2:#183c46; --line:#061114;
+  --amber:#f2b23c; --mint:#79e3c3; --cream:#f3e6c8; --dim:#a9b9b5; --plum:#e07a5f;
+  --px:4px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--deep);color:var(--cream);
+  font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;overflow:hidden}
+.mono{font-family:ui-monospace,"Cascadia Mono",Consolas,monospace;letter-spacing:.08em}
+img{display:block}
+
+.bg{position:fixed;inset:0;z-index:-2;overflow:hidden}
+.bg img{width:100%;height:100%;object-fit:cover;object-position:center 42%;
+  image-rendering:pixelated;filter:saturate(.92) contrast(1.02)}
+.bg::after{content:"";position:absolute;inset:0;
+  background:radial-gradient(120% 95% at 50% 38%,rgba(8,22,28,.34),rgba(6,17,22,.86) 82%),
+             linear-gradient(180deg,rgba(6,17,22,.66),rgba(6,17,22,.22) 32%,rgba(6,17,22,.88))}
+.scan{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.25;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.55) 0 1px,transparent 1px 4px)}
+
+.win{position:relative;background:var(--panel);border:var(--px) solid var(--line);
+  box-shadow:6px 6px 0 rgba(0,0,0,.55), inset 0 0 0 2px rgba(243,230,200,.06)}
+.bar{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--panel2);
+  border-bottom:var(--px) solid var(--line);font-size:11px;letter-spacing:.16em;color:var(--dim)}
+.bar i{width:10px;height:10px;background:var(--amber);box-shadow:0 0 0 2px var(--line) inset}
+.bar b{color:var(--cream);font-weight:700}
+
+.wrap{width:min(1120px,calc(100% - 48px));margin:0 auto;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding-bottom:40px}
+
+/* 顶栏 */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:20px 0 16px}
+.back{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:var(--cream);
+  font-size:14px;letter-spacing:.12em;border:3px solid var(--line);background:rgba(11,28,34,.72);
+  padding:13px 20px;box-shadow:3px 3px 0 rgba(0,0,0,.5)}
+.back:hover{background:var(--amber);color:#0d2027}
+.topbar .file{font-size:11px;color:var(--mint);letter-spacing:.24em}
+
+.head{display:flex;align-items:stretch;gap:14px;margin-bottom:16px;flex-wrap:wrap}
+.tag{display:inline-flex;align-items:center;font-size:13px;letter-spacing:.2em;color:var(--amber);border:2px solid var(--amber);padding:0 10px}
+.head h2{font-size:clamp(22px,2.6vw,30px);line-height:1.1;letter-spacing:.08em;text-shadow:2px 2px 0 #061114}
+.head .note{font-size:11px;color:var(--dim);margin-left:auto;letter-spacing:.1em;align-self:center}
+
+/* 两栏 */
+.player{display:grid;grid-template-columns:380px 1fr;gap:24px;margin-top:12px}
+
+/* 立绘舞台 */
+.stage{position:relative;min-height:430px;display:flex;align-items:center;justify-content:center;
+  padding:18px 18px 20px;overflow:hidden;
+  background:radial-gradient(55% 42% at 50% 58%,rgba(242,178,60,.18),transparent 72%),
+             repeating-conic-gradient(rgba(121,227,195,.05) 0% 25%,transparent 0% 50%) 0 0/16px 16px,
+             var(--panel)}
+.stage .floor{position:absolute;left:0;right:0;bottom:0;height:80px;pointer-events:none;
+  background:repeating-linear-gradient(90deg,rgba(121,227,195,.16) 0 2px,transparent 2px 26px),
+             linear-gradient(180deg,transparent,rgba(121,227,195,.1))}
+.stage img.sprite{height:360px;width:auto;image-rendering:pixelated;position:relative;z-index:2;
+  filter:drop-shadow(0 8px 0 rgba(0,0,0,.5))}
+.plate{position:absolute;left:18px;right:18px;bottom:14px;z-index:3;display:flex;
+  justify-content:space-between;align-items:center;font-size:11px;letter-spacing:.14em;
+  color:var(--dim);background:rgba(6,17,22,.72);border:2px solid var(--line);padding:8px 12px}
+.plate b{color:var(--cream);font-size:13px;letter-spacing:.08em}
+
+/* 信息面板 */
+.info .body{padding:18px 22px}
+.nm{font-size:32px;letter-spacing:.06em;text-shadow:2px 2px 0 #061114}
+.role{font-size:11px;color:var(--mint);letter-spacing:.18em;margin-top:8px}
+
+.slots{display:grid;gap:0;margin-top:18px}
+.slot{display:grid;grid-template-columns:84px 1fr;gap:14px;padding:8px 0;
+  border-bottom:2px dashed rgba(243,230,200,.14);align-items:center}
+.slot span:first-child{font-size:11px;letter-spacing:.14em;color:var(--mint)}
+.slot span:last-child{font-size:13px;color:var(--cream)}
+
+.block-lbl{font-size:10px;letter-spacing:.2em;color:var(--amber);margin:16px 0 8px;display:block}
+.intro{padding:12px 16px;border-left:3px solid var(--amber);
+  background:rgba(11,28,34,.55);font-size:12.5px;line-height:1.85;color:var(--cream)}
+
+.honors{display:grid;gap:0}
+.honor{display:grid;grid-template-columns:88px 1fr;gap:14px;padding:9px 0;
+  border-bottom:2px dashed rgba(243,230,200,.14);align-items:start}
+.honor .yr{font-family:ui-monospace,monospace;font-size:11px;color:var(--mint);letter-spacing:.08em}
+.honor b{display:block;font-size:13px;letter-spacing:.04em;margin-bottom:4px}
+.honor i{font-style:normal;font-size:11px;color:var(--dim);line-height:1.5}
+
+@media(max-width:900px){
+  body{overflow:auto}
+  .player{grid-template-columns:1fr}
+  .stage{min-height:380px}
+  .stage img.sprite{height:320px}
+}
+</style>
+</head>
+<body>
+
+<div class="bg"><img src="assets/bg-typing.gif" alt=""></div>
+<div class="scan"></div>
+
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="index.html">◀ 返回菜单</a>
+    <span class="file mono">存档 01 · 角色信息</span>
+  </div>
+
+  <div class="head">
+    <span class="tag">01</span><h2>角色信息</h2><span class="note">个人档案</span>
+  </div>
+
+  <div class="player">
+    <!-- 立绘舞台 -->
+    <aside class="stage win">
+      <div class="floor"></div>
+      <img class="sprite" src="assets/char-front-blink.gif" alt="角色立绘">
+      <div class="plate"><b>李洁瑜</b><span class="mono">等级 21</span></div>
+    </aside>
+
+    <!-- 信息面板 -->
+    <section class="info win">
+      <div class="bar"><i></i><b>角色状态</b></div>
+      <div class="body">
+        <div class="nm">李洁瑜</div>
+        <div class="role mono">剪辑 / AI 影像</div>
+
+        <div class="slots">
+          <div class="slot"><span>年龄 / 性别</span><span>21 岁 · 女</span></div>
+          <div class="slot"><span>求职岗位</span><span>剪辑师 / AI 影像师</span></div>
+          <div class="slot"><span>教育背景</span><span>四川电影电视学院 · 戏剧影视导演专业 · 本科（2023 – 2027）</span></div>
+          <div class="slot"><span>现居城市</span><span>广东广州</span></div>
+        </div>
+
+        <span class="block-lbl mono">自我评价</span>
+        <div class="intro">
+          有责任感，吃苦耐劳，擅于管理时间，勇于面对挑战；具备良好的自主学习能力，勤于学习、不断提高。
+        </div>
+
+        <span class="block-lbl mono">所获荣誉</span>
+        <div class="honors">
+          <div class="honor">
+            <span class="yr">2026</span>
+            <div><b>全国大学生广告艺术大赛 · 全国三等奖</b><i>作品《红丝贯古今，联通寄情长》</i></div>
+          </div>
+          <div class="honor">
+            <span class="yr">2026</span>
+            <div><b>全国大学生广告艺术大赛 · 四川省三等奖</b><i>作品《联心成结，遥寄相逢》</i></div>
+          </div>
+          <div class="honor">
+            <span class="yr">2023–2025</span>
+            <div><b>校内学习奖学金 · 连续三年</b><i>2023、2024、2025 学年</i></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+</body>
+</html>

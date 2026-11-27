@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>李洁瑜 · 作品大厅</title>
+<style>
+:root{
+  --deep:#0b1c22; --panel:#122e37; --panel2:#183c46; --line:#061114;
+  --amber:#f2b23c; --mint:#79e3c3; --cream:#f3e6c8; --dim:#a9b9b5; --plum:#e07a5f;
+  --px:4px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--deep);color:var(--cream);
+  font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;overflow:auto}
+.mono{font-family:ui-monospace,"Cascadia Mono",Consolas,monospace;letter-spacing:.08em}
+img{display:block}
+
+.bg{position:fixed;inset:0;z-index:-2;overflow:hidden}
+.bg img{width:100%;height:100%;object-fit:cover;object-position:center 42%;image-rendering:pixelated}
+.bg::after{content:"";position:absolute;inset:0;
+  background:radial-gradient(120% 95% at 50% 38%,rgba(8,22,28,.34),rgba(6,17,22,.86) 82%),
+             linear-gradient(180deg,rgba(6,17,22,.66) 0%,rgba(6,17,22,.26) 30%,
+             rgba(6,17,22,.72) 62%,rgba(6,17,22,.97) 88%,#0b1c22 100%)}
+.scan{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.25;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.55) 0 1px,transparent 1px 4px)}
+
+.wrap{width:min(1120px,calc(100% - 48px));margin:0 auto;padding:24px 0 40px}
+
+/* 顶栏 */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 0 12px}
+.back{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:var(--cream);
+  font-size:14px;letter-spacing:.12em;border:3px solid var(--line);background:rgba(11,28,34,.72);
+  padding:13px 20px;box-shadow:3px 3px 0 rgba(0,0,0,.5)}
+.back:hover{background:var(--amber);color:#0d2027}
+.topbar .file{font-size:11px;color:var(--mint);letter-spacing:.24em}
+
+.head{display:flex;align-items:stretch;gap:14px;margin-bottom:18px;flex-wrap:wrap}
+.tag{display:inline-flex;align-items:center;font-size:13px;letter-spacing:.2em;color:var(--amber);border:2px solid var(--amber);padding:0 10px}
+.head h2{font-size:clamp(22px,2.6vw,30px);line-height:1.1;letter-spacing:.08em;text-shadow:2px 2px 0 #061114}
+.head .note{font-size:11px;color:var(--dim);margin-left:auto;letter-spacing:.1em;align-self:center}
+
+/* 分组标题 */
+.sec{display:flex;align-items:center;gap:10px;margin:24px 0 14px}
+.sec:first-of-type{margin-top:6px}
+.sec i{width:10px;height:10px;background:var(--amber)}
+.sec b{font-size:13px;letter-spacing:.14em;color:var(--cream)}
+.sec span{margin-left:auto;font-size:11px;color:var(--dim);letter-spacing:.08em}
+
+/* 作品卡片墙 */
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.card{position:relative;background:var(--panel);border:3px solid var(--line);
+  box-shadow:5px 5px 0 rgba(0,0,0,.5);text-decoration:none;color:var(--cream);
+  transition:transform .12s ease, background-color .12s ease}
+.card:hover,.card:focus-visible{transform:translate(-2px,-2px);border-color:var(--amber)}
+button.card{font:inherit;cursor:pointer;text-align:left;width:100%}
+.thumb{position:relative;aspect-ratio:16/10;overflow:hidden;border-bottom:3px solid var(--line)}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.thumb.poster{background:var(--panel2)}
+.thumb.poster img{object-fit:contain}
+.grid.vgrid{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
+.vgrid .thumb{aspect-ratio:9/16}
+.thumb .num{position:absolute;left:8px;top:8px;font-family:ui-monospace,monospace;font-size:11px;
+  color:var(--mint);background:rgba(6,17,22,.78);border:2px solid var(--line);padding:3px 7px}
+.thumb .play{position:absolute;right:8px;bottom:8px;font-size:11px;letter-spacing:.1em;color:var(--cream);
+  background:rgba(6,17,22,.78);border:2px solid var(--line);padding:3px 8px}
+.meta{padding:12px 14px;display:grid;gap:6px}
+.meta b{font-size:14px;letter-spacing:.04em;line-height:1.4}
+.meta span{font-size:11px;color:var(--dim);letter-spacing:.08em}
+.meta span i{font-style:normal;color:var(--mint)}
+
+/* 本地播放弹窗 */
+.modal{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;padding:24px}
+.modal.open{display:flex}
+.modal .mask{position:absolute;inset:0;background:rgba(6,17,22,.84)}
+.modal .panel{position:relative;width:min(960px,100%);background:var(--panel);border:3px solid var(--line);box-shadow:6px 6px 0 rgba(0,0,0,.55)}
+.modal .bar{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:3px solid var(--line)}
+.modal .bar .tag{font-size:12px}
+.modal .bar b{font-size:15px;letter-spacing:.06em}
+.modal .close{margin-left:auto;cursor:pointer;font-family:inherit;font-size:13px;letter-spacing:.1em;
+  color:var(--cream);background:var(--panel2);border:2px solid var(--line);padding:8px 14px}
+.modal .close:hover{background:var(--amber);color:#0d2027}
+.modal .stage{aspect-ratio:16/9;background:#000;display:flex;align-items:center;justify-content:center}
+.modal .stage video{width:100%;height:100%;border:0;display:block;object-fit:contain}
+.modal .panel.vertical{width:min(420px,100%)}
+.modal .panel.vertical .stage{aspect-ratio:9/16;max-height:72vh;margin-left:auto;margin-right:auto}
+.modal .foot{padding:10px 16px;font-size:11px;color:var(--dim);letter-spacing:.08em}
+
+@media(max-width:980px){
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .grid.vgrid{grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}
+}
+@media(max-width:900px){
+  body{overflow:auto}
+}
+@media(max-width:560px){
+  .grid{grid-template-columns:1fr}
+  .grid.vgrid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+}
+</style>
+</head>
+<body>
+
+<div class="bg"><img src="assets/bg-typing.gif" alt=""></div>
+<div class="scan"></div>
+
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="index.html">◀ 返回菜单</a>
+    <span class="file mono">存档 02 · 作品大厅</span>
+  </div>
+
+  <div class="head">
+    <span class="tag">02</span><h2>作品大厅</h2><span class="note">影片陈列 · 共 11 部</span>
+  </div>
+
+  <!-- 短片 -->
+  <div class="sec"><i></i><b>短片</b><span>剧情 · 广告 · 宣传片 · MV</span></div>
+  <div class="grid">
+    <button class="card" data-video="assets/videos/v-01.mp4" data-poster="assets/work-shiwei.jpg" data-title="式微式微">
+      <div class="thumb"><img src="assets/work-shiwei.jpg" alt="式微式微"><span class="num">01</span><span class="play">▶ 播放</span></div>
+      <div class="meta"><b>式微式微</b><span><i>剧情短片</i></span></div>
+    </button>
+    <button class="card" data-video="assets/videos/v-02.mp4" data-poster="assets/work-qianli.jpg" data-title="千里走单骑">
+      <div class="thumb"><img src="assets/work-qianli.jpg" alt="千里走单骑"><span class="num">02</span><span class="play">▶ 播放</span></div>
+      <div class="meta"><b>千里走单骑</b><span><i>剧情短片</i></span></div>
+    </button>
+    <button class="card" data-video="assets/videos/v-03.mp4" data-poster="assets/work-buwang.jpg" data-title="念念不忘">
+      <div class="thumb"><img src="assets/work-buwang.jpg" alt="念念不忘"><span class="num">03</span><span class="play">▶ 播放</span></div>
+      <div class="meta"><b>念念不忘</b><span><i>剧情短片</i></span></div>
+    </button>
+    <button class="card" data-video="assets/videos/v-04.mp4" data-poster="assets/work-lianxin.jpg" data-title="联心成结，遥寄相逢">
+      <div class="thumb"><img src="assets/work-lianxin.jpg" alt="联心成结，遥寄相逢"><span class="num">04</span><span class="play">▶ 播放</span></div>
+      <div class="meta"><b>联心成结，遥寄相逢</b><span><i>广告</i></span></div>
+    </button>
+    <button class="card" data-video="assets/videos/v-05.mp4" data-poster="assets/work-hongsi.jpg" data-title="红丝贯古今，联通寄情长">
+      <div class="thumb"><img src="assets/work-hongsi.jpg" alt="红丝贯古今，联通寄情长"><span class="num">05</span><span class="play">▶ 播放</span></div>
+      <div class="meta"><b>红丝贯古今，联通寄情长</b><span><i>广告</i></span></div>
+    </button>
+    <button class="card" data-video="assets/videos/v-06.mp4" data-poster="assets/work-hongqiqiu.jpg" data-title="红气球">
+      <div class="thumb"><img src="assets/work-hongqiqiu.jpg" alt="红气球"><span class="num">06</span><span class="play">▶ 播放</span></div>
+      <div class="meta"><b>红气球</b><span><i>宣传片</i></span></div>
+    </button>
+    <button class="card" data-video="assets/videos/v-07.mp4" data-poster="assets/work-xin.jpg" data-title="未给姐姐寄出的一封信">
+      <div class="thumb"><img src="assets/work-xin.jpg" alt="未给姐姐寄出的一封信"><span class="num">07</span><span class="play">▶ 播放</span></div>
+      <div class="meta"><b>未给姐姐寄出的一封信</b><span><i>MV</i></span></div>
+    </button>
+  </div>
+
+  <!-- 短剧 / 漫剧 -->
+  <div class="sec"><i></i><b>短剧 / 漫剧</b><span>红果 · 腾讯 全集</span></div>
+  <div class="grid vgrid">
+    <a class="card" href="https://novelquickapp.com/hongguo/ug/pages/video-list-share-ssr?encrypt_did=MDEEDPufQ4xmHMYOmLvdVQQPdqperaGNGw4hh3mnsRbtBBBPJzBX9syQS8xGeluZE%2BTW&ui_exp_group=3&uid=91925ff24a2757643d17cff908ee8147&zlink=https%3A%2F%2Fapplink.novelquickapp.com%2FdVu4P%3FschemeParams%3D%257B%2522video_series_id%2522%253A%25227605160023567649816%2522%252C%2522vs_id_type%2522%253A%25221%2522%252C%2522source%2522%253A%25228%2522%252C%2522module_name%2522%253A%2522share%2522%257D&gd_label=click_schema_lhft_share_novelread_android&use_open_launch_app_novel=1&user_id=768ba18435034007342a981592680ee2&did=91925ff24a2757643d17cff908ee8147&ug_token=%23HG0T-HC6vY8EY%23&source_channel=wechat&share_channel=wechat&entrance=video_player_press&share_token=670862a5-796b-4fd6-a425-41562eb64930" target="_blank" rel="noopener">
+      <div class="thumb poster"><img src="assets/work-mask.jpg" alt="脸谱渡两世，云华共此生"><span class="num">08</span></div>
+      <div class="meta"><b>脸谱渡两世，云华共此生</b><span><i>短剧</i> · 红果全集</span></div>
+    </a>
+    <a class="card" href="https://m.v.qq.com/x/m/play?vid=o3267qta0zm&cid=mzc003e1byu724g&ptag=share_11_11&pageStyle=immersive_second_page&pageType=immerse&url_from=share&second_share=0&share_from=copy" target="_blank" rel="noopener">
+      <div class="thumb poster"><img src="assets/work-revive.jpg" alt="全军无限复活，我无敌"><span class="num">09</span></div>
+      <div class="meta"><b>全军无限复活，我无敌</b><span><i>漫剧</i> · 腾讯全集</span></div>
+    </a>
+  </div>
+
+  <!-- 短视频 -->
+  <div class="sec"><i></i><b>短视频</b><span>实拍 · 广告短片</span></div>
+  <div class="grid vgrid">
+    <button class="card" data-video="assets/videos/v-10.mp4" data-poster="assets/work-cp.jpg" data-title="cp 快问快答" data-vertical="1">
+      <div class="thumb"><img src="assets/work-cp.jpg" alt="cp 快问快答"><span class="num">10</span><span class="play">▶ 播放</span></div>
+      <div class="meta"><b>cp 快问快答</b><span><i>短视频</i></span></div>
+    </button>
+    <button class="card" data-video="assets/videos/v-11.mp4" data-poster="assets/work-nescafe.jpg" data-title="雀巢咖啡" data-vertical="1">
+      <div class="thumb"><img src="assets/work-nescafe.jpg" alt="雀巢咖啡"><span class="num">11</span><span class="play">▶ 播放</span></div>
+      <div class="meta"><b>雀巢咖啡</b><span><i>短视频</i></span></div>
+    </button>
+  </div>
+</div>
+
+<!-- 本地播放弹窗 -->
+<div class="modal" id="playerModal" role="dialog" aria-modal="true">
+  <div class="mask" data-close></div>
+  <div class="panel">
+    <div class="bar">
+      <span class="tag">▶ 播放</span>
+      <b id="modalTitle">作品</b>
+      <button class="close" data-close>✕ 关闭</button>
+    </div>
+    <div class="stage"><video id="modalVideo" controls playsinline preload="none"></video></div>
+    <div class="foot">本地作品 · 可使用播放器控制播放进度与音量</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var modal=document.getElementById('playerModal'),
+      panel=modal.querySelector('.panel'),
+      video=document.getElementById('modalVideo'),
+      title=document.getElementById('modalTitle');
+  function open(btn){
+    title.textContent=btn.dataset.title;
+    panel.classList.toggle('vertical', !!btn.dataset.vertical);
+    video.poster=btn.dataset.poster;
+    video.src=btn.dataset.video;
+    video.load();
+    modal.classList.add('open');
+    document.body.style.overflow='hidden';
+  }
+  function close(){
+    video.pause();
+    video.removeAttribute('src');
+    video.load();
+    modal.classList.remove('open');
+    document.body.style.overflow='';
+  }
+  document.querySelectorAll('button.card[data-video]').forEach(function(c){
+    c.addEventListener('click',function(){open(c);});
+  });
+  modal.querySelectorAll('[data-close]').forEach(function(el){
+    el.addEventListener('click',close);
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){close();}
+  });
+})();
+</script>
+
+</body>
+</html>

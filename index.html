@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>李洁瑜 · 作品集</title>
+<style>
+:root{
+  --deep:#0b1c22; --panel:#122e37; --panel2:#183c46; --line:#061114;
+  --amber:#f2b23c; --mint:#79e3c3; --cream:#f3e6c8; --dim:#a9b9b5;
+  --px:4px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--deep);color:var(--cream);
+  font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;overflow:hidden;
+}
+.mono{font-family:ui-monospace,"Cascadia Mono",Consolas,monospace;letter-spacing:.08em}
+
+/* 背景动图 + 压暗 + 扫描线 */
+.bg{position:fixed;inset:0;z-index:-2;overflow:hidden}
+.bg img{width:100%;height:100%;object-fit:cover;object-position:center 42%;
+  image-rendering:pixelated;filter:saturate(.92) contrast(1.02)}
+.bg::after{content:"";position:absolute;inset:0;
+  background:radial-gradient(120% 95% at 50% 38%,rgba(8,22,28,.30),rgba(6,17,22,.82) 80%),
+             linear-gradient(180deg,rgba(6,17,22,.62),rgba(6,17,22,.18) 32%,rgba(6,17,22,.86))}
+.scan{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.25;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.55) 0 1px,transparent 1px 4px)}
+
+/* 右侧菜单列 */
+.stage{height:100vh;display:flex;align-items:center;justify-content:flex-end;padding:0 180px}
+.menu{width:min(430px,calc(100vw - 80px))}
+
+.kicker{font-size:11px;color:var(--mint);letter-spacing:.24em;margin-bottom:16px}
+h1{position:relative;display:inline-flex;align-items:center;gap:6px;width:fit-content;
+  font-size:clamp(38px,5vw,56px);line-height:1;letter-spacing:.04em;
+  text-shadow:3px 3px 0 #061114,6px 6px 0 rgba(0,0,0,.35)}
+.cursor{display:inline-block;width:.46em;height:.98em;
+  background:var(--amber);animation:blink 1.2s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.sub{font-size:13px;color:var(--dim);margin-top:22px;letter-spacing:.06em}
+
+nav{margin-top:30px;display:grid;gap:10px}
+.item{
+  position:relative;display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:14px;
+  padding:13px 16px;border:3px solid var(--line);background:rgba(11,28,34,.72);
+  box-shadow:4px 4px 0 rgba(0,0,0,.5);color:var(--cream);text-decoration:none;
+  transition:background-color .12s ease,color .12s ease,transform .12s ease;
+}
+.item::before{content:"▸";position:absolute;left:-26px;display:none;font-size:16px;color:var(--amber)}
+.item .no{font-family:ui-monospace,monospace;font-size:11px;color:var(--mint);letter-spacing:.1em}
+.item .cn{font-size:17px;letter-spacing:.12em}
+.item .en{font-size:10px;color:var(--dim);letter-spacing:.16em;text-align:right}
+
+/* 仅鼠标停留 / 键盘聚焦时高亮为琥珀色 */
+.item:hover,.item:focus-visible{background:var(--amber);color:#0d2027;
+  box-shadow:4px 4px 0 rgba(0,0,0,.6);transform:translate(-1px,-1px)}
+.item:hover::before,.item:focus-visible::before{display:block}
+.item:hover .no,.item:focus-visible .no{color:#0d2027}
+.item:hover .en,.item:focus-visible .en{color:#0d2027;opacity:.7}
+
+.foot{margin-top:22px;display:flex;justify-content:space-between;
+  font-size:10px;color:rgba(243,230,200,.45);letter-spacing:.2em}
+
+@media(max-width:760px){
+  .stage{justify-content:center;padding:0 24px}
+  .menu{width:100%}
+  .item::before{left:-18px}
+  nav{margin-top:24px}
+}
+</style>
+</head>
+<body>
+
+<div class="bg"><img src="assets/bg-typing.gif" alt=""></div>
+<div class="scan"></div>
+
+<main class="stage">
+  <div class="menu">
+    <div class="kicker mono">存档 01 · 选择角色</div>
+    <h1>李洁瑜<span class="cursor"></span></h1>
+    <div class="sub">这里是我的作品与履历存档</div>
+
+    <nav>
+      <a class="item" href="character.html"><span class="no">01</span><span class="cn">角色信息</span><span class="en">个人档案</span></a>
+      <a class="item" href="works.html"><span class="no">02</span><span class="cn">作品大厅</span><span class="en">影片陈列</span></a>
+      <a class="item" href="skills.html"><span class="no">03</span><span class="cn">技能与经历</span><span class="en">软件与实践</span></a>
+      <a class="item" href="contact.html"><span class="no">04</span><span class="cn">存档点</span><span class="en">联系与简历</span></a>
+    </nav>
+
+    <div class="foot mono">
+      <span>▼ 选择</span>
+      <span>等级 21</span>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>
